@@ -160,12 +160,12 @@ As we can see, there has been a lot less regulation than legislation. Nutrititio
 
 ```{r}
 
-
   predictedStatus <-
   Legislation %>%
   sample_n(20) %>%
-    rpart(status ~ year + state, data = .)
-  
+  rpart(status ~ year + state, data = .)
+
+rpart.plot(Legislation, roundint = FALSE)
 
 ```
 
