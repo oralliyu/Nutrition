@@ -97,8 +97,7 @@ yearlyData %>%
   ggplot(aes(x=year,y=total ))+
   geom_bar(stat='identity',position='stack', width=.9, fill = "red") +
   ylab("Total (1000s)") +
-  xlab("Year") +
-  xlim()
+  xlab("Year") 
 
 
 ```
@@ -125,17 +124,50 @@ Each bar in the chart represents one year. One can see that in 2011, the most le
 
 ```{r}
 
-predictedStatus <-
-  Legislation %>%
-    rpart(status ~ year + state, data = .)
+#predictedStatus <-
+  #Legislation %>%
+  #sample_n(200) %>%
+    #rpart(status ~ year + state, data = .)
+
+#rpart.plot(predictedStatus, roundint = FALSE)
+
+
+```
+
+##
+
+```{r}
+
+Legislation %>%
+  sample_n(200) %>%
+  group_by(year, healthTopic, PolicyTypeID) %>%
+  summarise(total = sum(year)) %>%
+  mutate(total = total/1000) %>%
+  ggplot(aes(x= year, y = total)) +
+  geom_point(color = "red") +
+  facet_grid(PolicyTypeID ~ healthTopic) +
+  ylab("total (1000s)") +
+  xlab("Year")
 
 
 ```
 
 
+As we can see, there has been a lot less regulation than legislation. Nutrititional legislation appears to be the most popular with an exponentially growing total without counting years after about 2012.
 
 
+## Predict Status from year and state
 
+```{r}
+
+
+  predictedStatus <-
+  Legislation %>%
+  sample_n(20) %>%
+    rpart(status ~ year + state, data = .)
+  
+
+```
 
 
 
