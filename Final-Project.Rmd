@@ -12,6 +12,9 @@ library(dbplyr)
 library(DataComputing)
 library(magrittr)
 library(Hmisc)
+library(party)
+library(rpart)
+
 rm(list = ls())            #Clean up environment
 
 ```
@@ -59,8 +62,7 @@ untidy           #Take a look
 
 Legislation <-
   untidy %>%
-  rename(year = Year, quarter = Quarter, state = LocationAbbr, healthTopic = HealthTopic, policyTopic = PolicyTopic, dataSource = DataSource, setting = Setting, title = Title, status = Status, citation = Citation, statusAltValue = StatusAltValue, dataType = DataType, comments = Comments, enDate = EnactedDate, effDate = EffectiveDate, coordinates = GeoLocation, display = DisplayOrder) %>%
-  mutate(enDate = )
+  rename(year = Year, quarter = Quarter, state = LocationAbbr, healthTopic = HealthTopic, policyTopic = PolicyTopic, dataSource = DataSource, setting = Setting, title = Title, status = Status, citation = Citation, statusAltValue = StatusAltValue, dataType = DataType, comments = Comments, enDate = EnactedDate, effDate = EffectiveDate, coordinates = GeoLocation, display = DisplayOrder)
 
 Legislation
 
@@ -103,20 +105,32 @@ yearlyData %>%
 
 Each bar in the chart represents one year. One can see that in 2011, the most legislation/regulation has been passed between 2001 and 2017.
 
-## Take 
+## Legislation on the Map
 
 ```{r}
 
-Legislation %>%
-  group_by(healthTopic, year) %>%
-  summarise(total = sum(year))
-  
-Legislation %>%
-  ggplot
+#coordinates <- Legislation[,17]
+
+#long <- sapply(Legislation$coordinates, "[", 1)
+
+
+#lat <- sapply(Legislation$coordinates, "[", 2)
+
+#long
 
 
 ```
 
+## Predicting Status based on Year and State
+
+```{r}
+
+predictedStatus <-
+  Legislation %>%
+    rpart(status ~ year + state, data = .)
+
+
+```
 
 
 
