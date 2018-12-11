@@ -54,13 +54,15 @@ untidy           #Take a look
 
 ```{r}
 
-#Clean Data
+#Clean Data 
+#Change variables to start with lowercase/ make easier to use
 
-legislation <-
+Legislation <-
   untidy %>%
-  mutate(Year = year)
+  rename(year = Year, quarter = Quarter, state = LocationAbbr, healthTopic = HealthTopic, policyTopic = PolicyTopic, dataSource = DataSource, setting = Setting, title = Title, status = Status, citation = Citation, statusAltValue = StatusAltValue, dataType = DataType, comments = Comments, enDate = EnactedDate, effDate = EffectiveDate, coordinates = GeoLocation, display = DisplayOrder) %>%
+  mutate(enDate = )
 
-legislation
+Legislation
 
 
 
@@ -79,16 +81,41 @@ We can see how much legislation has been passed in certain years, which years ha
 
 ## Which year passed the most legislation?
 
+
 ```{r}
 
+yearlyData <-
+Legislation %>%
+  group_by(year) %>%
+  summarise(total = sum(year)) %>%
+  mutate(total = total/1000)
 
 
+yearlyData %>%
+  ggplot(aes(x=year,y=total ))+
+  geom_bar(stat='identity',position='stack', width=.9, fill = "red") +
+  ylab("Total (1000s)") +
+  xlab("Year") +
+  xlim()
 
 
 ```
 
+Each bar in the chart represents one year. One can see that in 2011, the most legislation/regulation has been passed between 2001 and 2017.
+
+## Take 
+
+```{r}
+
+Legislation %>%
+  group_by(healthTopic, year) %>%
+  summarise(total = sum(year))
+  
+Legislation %>%
+  ggplot
 
 
+```
 
 
 
