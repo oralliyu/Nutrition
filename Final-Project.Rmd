@@ -1,0 +1,119 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(data.table)       #Load all required packages
+library(rvest)
+library(lubridate)
+library(dbplyr)
+library(DataComputing)
+library(magrittr)
+library(Hmisc)
+rm(list = ls())            #Clean up environment
+
+```
+
+
+###Background Information
+
+This dataset contains policy data for 50 US states and DC from 2001 to 2017. Data include information related to state legislation and regulations on nutrition, physical activity, and obesity in settings such as early care and education centers, restaurants, schools, work places, and others. To identify individual bills, use the identifier ProvisionID. A bill or citation may appear more than once because it could apply to multiple health or policy topics, settings, or states. 
+
+
+```{r}
+
+
+getwd()                          #Get working directory
+setwd("~/Downloads")             #Set working directory 
+
+untidy <-read.csv("CDC_Nutrition__Physical_Activity__and_Obesity_-_Legislation.csv")    #Read file in table format and create a data frame from it
+
+gc(reset=TRUE)                 #Change from data frame to data table
+tracemem(untidy)
+untidy <- as.data.table(untidy)
+gc()
+
+
+```
+
+
+
+
+##What can we do with this data?
+
+This dataset can be useful in looking at 
+
+```{r}
+
+untidy           #Take a look
+
+
+```
+
+```{r}
+
+#Clean Data
+
+legislation <-
+  untidy %>%
+  mutate(Year = year)
+
+legislation
+
+
+
+```
+
+
+
+
+
+
+
+## What type of information can we find with this data?
+
+We can see how much legislation has been passed in certain years, which years have been the most progressive, which states have more legislation than others, which topic has been most popular, and more. This information can give government officials the ability to see where certain states need to improve, which topics need to be emphasized, and more.
+
+
+## Which year passed the most legislation?
+
+```{r}
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
