@@ -3,6 +3,7 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+### Health Policy in the United States
 
 ```{r}
 library(data.table)       #Load all required packages
@@ -14,6 +15,7 @@ library(magrittr)
 library(Hmisc)
 library(party)
 library(rpart)
+library(rpart.plot)
 
 rm(list = ls())            #Clean up environment
 
@@ -38,7 +40,6 @@ tracemem(untidy)
 untidy <- as.data.table(untidy)
 gc()
 
-
 ```
 
 
@@ -49,6 +50,9 @@ untidy           #Take a look
 
 
 ```
+
+
+
 
 ```{r}
 
@@ -62,14 +66,18 @@ Legislation <-
 Legislation
 
 
-
 ```
+
 
 
 
 ## What type of information can we find with this data?
 
 We can see how much legislation has been passed in certain years, which years have been the most progressive, which states have more legislation than others, which topic has been most popular, and more. This information can give government officials the ability to see where certain states need to improve, which topics need to be emphasized, and more.
+
+
+
+
 
 
 ## Which year passed the most legislation?
@@ -89,7 +97,6 @@ yearlyData %>%
   geom_bar(stat='identity',position='stack', width=.9, fill = "red") +
   ylab("Total (1000s)") +
   xlab("Year") 
-
 
 ```
 
@@ -119,6 +126,11 @@ Legislation %>%
 As we can see, there has been a lot less regulation than legislation. Nutrititional legislation appears to be the most popular as represented by the many glyphs on the graph. Regulation is less popular and shows little to no type of trend in the graph. In each of the graphs, around 2011 there is peak which corresponds with our finding earlier about 2011 being the most popular year.
 
 
+
+
+
+
+
 ## Legislation on a map
 
 ```{r}
@@ -136,6 +148,11 @@ USMap(data = stateData, key = "state", fill = "total")   #plot on a USMap
 
 From this graph, we can see that states like New York, California, Washington, and Illnois, and Hawaii are weaker than most when it comes to passing legislation on nutrition, obesity, and physical activity.
 
+
+
+
+
+
 ## Timeline of Legislation By Setting
 
 ```{r}
@@ -152,8 +169,6 @@ Legislation %>%
   facet_wrap(~PolicyTypeID)
 
 
-
-
 ```
 
 In this graph we still see a peak in 2011, but we can also now see what the bills were passed for. Community takes the lead in both regulation and legislation. 
@@ -161,6 +176,34 @@ In this graph we still see a peak in 2011, but we can also now see what the bill
 
 
 
+
+
+
+##Predict Year from Status and State
+
+```{r}
+
+#subset legislation's data to optimize r running time
+smaller <-
+Legislation %>%
+  filter(healthTopic == "Nutrition") %>% 
+  filter( status != "Introduced") %>%
+  filter( status != "Vetoed") %>%
+  filter( state %in% c("PA", "CA"))
+
+#create tree
+statusPrediction <- 
+  party::ctree(
+    year ~ state + status,
+    data = smaller)
+
+#plot tree
+plot(statusPrediction, type = "simple")
+
+
+```
+
+From this graph we conclude that a dead bill from California is likely to be from 2010 while a dead bill from Pennsylvania is likely to be from 2009.
 
 
 
